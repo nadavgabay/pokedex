@@ -26,13 +26,14 @@
     justify-content: center;
     padding: 20px;
     overflow: hidden;
+    background-color: white;
+    cursor: pointer;
 }
 
 .pokeballBack {
     position: absolute;
     width: 150px;
     height: 150px;
-    background: radial-gradient(circle, rgba(29, 47, 77, 0.8) 0%, rgba(13, 20, 33, 0) 70%);
     border-radius: 50%;
     z-index: 0;
 }
@@ -45,7 +46,6 @@
     transform: translate(-50%, -50%);
     width: 110px;
     height: 110px;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%231d2f4d' d='M50 0C22.4 0 0 22.4 0 50s22.4 50 50 50 50-22.4 50-50S77.6 0 50 0zm0 8c20.4 0 37.5 14.5 41.5 34H78.2c-3.7-10.4-13.6-18-25.2-18-11.6 0-21.5 7.6-25.2 18H8.5C12.5 22.5 29.6 8 50 8zm0 84c-20.4 0-37.5-14.5-41.5-34h33.3c3.7 10.4 13.6 18 25.2 18s21.5-7.6 25.2-18h33.3c-4 19.5-21.1 34-41.5 34zm0-56c6.6 0 12 5.4 12 12s-5.4 12-12 12-12-5.4-12-12 5.4-12 12-12z'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: center;
     opacity: 0.2;
