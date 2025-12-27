@@ -1,0 +1,29 @@
+.container {
+    position: relative;
+}
+
+.select {
+    appearance: none;
+    padding: 0.8rem 2rem 0.8rem 1rem;
+    border-radius: 8px;
+    border: 2px solid #333;
+    background-color: #222;
+    color: #fff;
+    min-width: 150px;
+    cursor: pointer;
+    font-family: var(--font-hero);
+    font-weight: bold;
+    box-shadow: 2px 2px 0 #000;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+}
+
+.arrow {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #fff;
+    pointer-events: none;
+    font-size: 0.6rem;
+}

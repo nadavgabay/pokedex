@@ -1,0 +1,46 @@
+.appContainer {
+    max-width: 1000px;
+    margin: 0 auto;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #DC0A2D;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+    position: relative;
+}
+
+.screenArea {
+    flex: 1;
+    background-color: var(--color-screen-bg);
+    margin: 0 2rem 2rem 2rem;
+    border-radius: 8px 8px 32px 8px;
+    border: 8px solid var(--color-bezel);
+    padding: 1.5rem;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.screenGlare {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 50%);
+    pointer-events: none;
+    border-top-right-radius: 0;
+}
+
+.scrollTrigger {
+    height: 20px;
+    margin: 1rem 0;
+}
+
+.loadingMore {
+    text-align: center;
+    font-family: var(--font-retro);
+    font-size: 0.7rem;
+    color: #666;
+}

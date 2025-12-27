@@ -1,0 +1,23 @@
+.container {
+    position: relative;
+    flex: 1;
+    min-width: 200px;
+}
+
+.input {
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    border: 4px solid #999;
+    background-color: #C5D6C5;
+    color: #222;
+    width: 100%;
+    font-family: var(--font-retro);
+    font-size: 0.7rem;
+    box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.2);
+    outline: none;
+    text-transform: uppercase;
+}
+
+.input::placeholder {
+    color: #555;
+}

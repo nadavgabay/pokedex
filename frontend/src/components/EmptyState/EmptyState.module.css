@@ -1,0 +1,25 @@
+.container {
+    text-align: center;
+    padding: 3rem;
+    color: var(--color-text-secondary);
+    width: 100%;
+}
+
+.icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.message {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.button {
+    color: var(--color-accent);
+    text-decoration: underline;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}

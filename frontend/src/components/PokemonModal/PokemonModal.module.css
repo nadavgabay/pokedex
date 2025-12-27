@@ -1,0 +1,222 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    backdrop-filter: blur(8px);
+    animation: fadeIn 0.3s ease;
+}
+
+.modalContent {
+    perspective: 800px;
+    transform-style: preserve-3d;
+    max-width: 90vw;
+    width: 450px;
+}
+
+.cardRotator {
+    position: relative;
+    width: 100%;
+    border-radius: var(--radius-lg);
+    background-color: var(--premium-card-bg);
+    transform-style: preserve-3d;
+    transition: transform 0.1s ease-out;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+    transform: rotateY(var(--rotate-x, 0deg)) rotateX(var(--rotate-y, 0deg));
+}
+
+.cardFront {
+    position: relative;
+    border-radius: var(--radius-lg);
+    background-color: var(--premium-card-bg);
+    border: 1px solid var(--premium-card-border);
+    overflow: hidden;
+    transform: translateZ(0);
+    /* Fix for Safari */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Holographic Shine Effect */
+.shine {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(115deg,
+            transparent 20%,
+            var(--premium-accent-glow) 25%,
+            transparent 30%,
+            transparent 80%);
+    z-index: 10;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+    opacity: var(--opacity, 0);
+    background-position: var(--bg-x, 50%) var(--bg-y, 50%);
+    background-size: 200% 200%;
+    transition: opacity 0.1s;
+}
+
+.glare {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: var(--radius-lg);
+    background: radial-gradient(farthest-corner circle at var(--pointer-x) var(--pointer-y),
+            rgba(255, 255, 255, 0.45) 5%,
+            rgba(255, 255, 255, 0.2) 20%,
+            rgba(0, 0, 0, 0.5) 90%);
+    z-index: 10;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+    opacity: var(--opacity, 0);
+    transition: opacity 0.1s;
+}
+
+.imageSection {
+    position: relative;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle, rgba(29, 47, 77, 0.9) 0%, rgba(13, 20, 33, 0) 70%);
+    transform: translateZ(20px);
+    margin: 20px;
+    border-radius: 50%;
+}
+
+.pokemonImage {
+    max-width: 250px;
+    max-height: 250px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.3));
+    transform: translateZ(50px);
+}
+
+.infoSection {
+    padding: 2rem;
+    background-color: rgba(13, 20, 33, 0.95);
+    border-top: 2px solid var(--premium-accent);
+    transform: translateZ(30px);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.number {
+    font-family: var(--font-hero);
+    color: var(--premium-text-blue);
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.generation {
+    font-size: 0.7rem;
+    color: #666;
+    text-transform: uppercase;
+    border: 1px solid #444;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.name {
+    margin: 0 0 1rem 0;
+    font-family: var(--font-hero);
+    font-size: 2.5rem;
+    color: white;
+    text-transform: capitalize;
+}
+
+.types {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.statsGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1.5rem;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.statItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.statLabel {
+    font-size: 0.7rem;
+    color: #888;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    font-family: var(--font-hero);
+}
+
+.statValue {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: white;
+    font-family: var(--font-retro);
+}
+
+.legendaryBadge {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    color: #000;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    margin-top: 1rem;
+    display: inline-block;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.closeButton {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+}
+
+.closeButton:hover {
+    opacity: 1;
+}
