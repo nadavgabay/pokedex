@@ -12,13 +12,15 @@ def get_pokemon():
     sort_order = request.args.get('sort', default='asc', type=str)
     type_filter = request.args.get('type', default=None, type=str)
     search_query = request.args.get('search', default=None, type=str)
+    captured_param = request.args.get('captured', default='false', type=str)
+    captured_only = captured_param.lower() == 'true'
     
     if limit not in [5, 10, 20]:
          return jsonify({"success": False, "error": "Invalid limit value. Allowed values: 5, 10, 20"}), 400
 
     all_data = pokemon_service.get_all_pokemon()
     
-    filtered_data = pokemon_service.filter_pokemon(all_data, type_filter)
+    filtered_data = pokemon_service.filter_pokemon(all_data, type_filter, captured_only)
     filtered_data = pokemon_service.search_pokemon(filtered_data, search_query)
     
     sorted_data = pokemon_service.sort_pokemon(filtered_data, sort_order)

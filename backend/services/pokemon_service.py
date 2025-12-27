@@ -12,16 +12,28 @@ CAPTURED = set()
 def get_captured_count() -> int:
     return len(CAPTURED)
 
+LAST_MTIME = 0
+
 def get_all_pokemon() -> List[Dict[str, Any]]:
-    global CACHE
-    if CACHE is None:
+    global CACHE, LAST_MTIME
+
+    try:
+        current_mtime = os.path.getmtime(db.DB_PATH)
+    except OSError:
+        current_mtime = 0
+
+    # If cache is empty or file changed, reload
+    if CACHE is None or current_mtime != LAST_MTIME:
         try:
             raw_data = db.get()
             for idx, p in enumerate(raw_data):
                 p['id'] = idx + 1
             CACHE = raw_data
-        except:
-            CACHE = []
+            LAST_MTIME = current_mtime
+        except Exception as e:
+            print(f"Error fetching DB: {e}")
+            if CACHE is None: CACHE = []
+            
     return CACHE if CACHE else []
 
 def get_all_types(data: List[Dict[str, Any]]) -> List[str]:
@@ -33,10 +45,15 @@ def get_all_types(data: List[Dict[str, Any]]) -> List[str]:
             types.add(p['type_two'])
     return sorted(list(types))
 
-def filter_pokemon(data: List[Dict[str, Any]], type_filter: Optional[str]) -> List[Dict[str, Any]]:
-    if not type_filter:
-        return data
-    return [p for p in data if p.get('type_one') == type_filter or p.get('type_two') == type_filter]
+def filter_pokemon(data: List[Dict[str, Any]], type_filter: Optional[str], captured_only: bool = False) -> List[Dict[str, Any]]:
+    filtered = data
+    if type_filter:
+        filtered = [p for p in filtered if p.get('type_one') == type_filter or p.get('type_two') == type_filter]
+    
+    if captured_only:
+        filtered = [p for p in filtered if is_captured(p.get('id'))]
+        
+    return filtered
 
 def search_pokemon(data: List[Dict[str, Any]], query: Optional[str]) -> List[Dict[str, Any]]:
     if not query:

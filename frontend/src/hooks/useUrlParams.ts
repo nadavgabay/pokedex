@@ -11,6 +11,7 @@ export function useUrlParams() {
         sort: (searchParams.get('sort') as SortOrder) || 'asc',
         type: searchParams.get('type') || undefined,
         search: searchParams.get('search') || '',
+        captured: searchParams.get('captured') === 'true',
     }), [searchParams]);
 
     const updateParams = (newParams: Partial<typeof params>) => {

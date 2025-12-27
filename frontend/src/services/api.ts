@@ -16,6 +16,7 @@ export interface GetPokemonParams {
     sort?: SortOrder;
     type?: string;
     search?: string;
+    captured?: boolean;
 }
 
 export const getPokemon = async (params: GetPokemonParams = {}): Promise<PokemonResponse> => {

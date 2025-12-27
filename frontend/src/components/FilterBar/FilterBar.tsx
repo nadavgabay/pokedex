@@ -16,6 +16,8 @@ interface FilterBarProps {
     onSortChange: (sort: SortOrder) => void;
     limit: number;
     onLimitChange: (limit: number) => void;
+    captured: boolean;
+    onCapturedChange: (captured: boolean) => void;
     onClearAll: () => void;
 }
 
@@ -24,6 +26,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
     search, onSearchChange,
     sort, onSortChange,
     limit, onLimitChange,
+    captured, onCapturedChange,
     onClearAll
 }) => {
     return (
@@ -37,9 +40,19 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                 <div className={styles.controls}>
                     <SortControls sort={sort} onChange={onSortChange} />
                     <PageSizeSelector limit={limit} onChange={onLimitChange} />
+
+                    <div className={styles.toggleContainer} onClick={() => onCapturedChange(!captured)}>
+                        <input
+                            type="checkbox"
+                            checked={captured}
+                            onChange={(e) => onCapturedChange(e.target.checked)}
+                            className={styles.toggleCheckbox}
+                        />
+                        <span className={styles.toggleLabel}>CAUGHT ONLY</span>
+                    </div>
                 </div>
 
-                {(selectedType || search || sort !== 'asc') && (
+                {(selectedType || search || sort !== 'asc' || captured) && (
                     <button onClick={onClearAll} className={styles.resetButton}>
                         RESET SYSTEM
                     </button>

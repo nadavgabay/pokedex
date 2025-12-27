@@ -13,7 +13,7 @@ export const usePokemon = (params: GetPokemonParams) => {
 
     useEffect(() => {
         setMaxPage(null);
-    }, [params.limit, params.sort, params.type, params.search]);
+    }, [params.limit, params.sort, params.type, params.search, params.captured]);
 
     useEffect(() => {
         let ignore = false;
@@ -103,7 +103,7 @@ export const usePokemon = (params: GetPokemonParams) => {
         return () => {
             ignore = true;
         };
-    }, [params.page, params.limit, params.sort, params.type, params.search]);
+    }, [params.page, params.limit, params.sort, params.type, params.search, params.captured]);
 
     const handleCapture = async (id: number) => {
         setUpdatingId(id);
@@ -127,9 +127,15 @@ export const usePokemon = (params: GetPokemonParams) => {
         try {
             const res = await releasePokemon(id);
             if (res.success) {
-                setPokemon(prev => prev.map(p =>
-                    p.id === id ? { ...p, captured: false } : p
-                ));
+                if (params.captured) {
+                    // If we are in "Caught Only" mode, remove it from the list immediately
+                    setPokemon(prev => prev.filter(p => p.id !== id));
+                } else {
+                    // Otherwise just update the status
+                    setPokemon(prev => prev.map(p =>
+                        p.id === id ? { ...p, captured: false } : p
+                    ));
+                }
                 setMetadata(prev => prev ? { ...prev, capturedCount: prev.capturedCount > 0 ? prev.capturedCount - 1 : 0 } : null);
             }
         } catch (err) {

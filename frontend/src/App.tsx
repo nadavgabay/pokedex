@@ -15,10 +15,8 @@ function AppContent() {
   const [types, setTypes] = useState<string[]>([]);
   const { ref, inView } = useInView();
   const [isInitialLoad, setIsInitialLoad] = useState(true);
-  // Store the actual page number we have SUCCESSFULLY loaded or ARE loading
   const requestedPageRef = useRef(params.page);
 
-  // Prevent infinite scroll from triggering immediately on refresh/restore
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsInitialLoad(false);
@@ -27,15 +25,11 @@ function AppContent() {
   }, []);
 
   useEffect(() => {
-    // Only proceed if we aren't already loading, the sentinel is in view,
-    // we finished the initial cooldown, and there's more data.
+    // Load next page when scrolling to bottom
     if (!isInitialLoad && inView && metadata && metadata.hasNext && !loading) {
-      // Logic for infinite scroll:
-      // We want to avoid "chaining" too many pages at once if the user is at the bottom.
-      // A small debounce ensures that the UI has time to render new items
-      // before we decide to fetch even more.
+
+      // Debounce to prevent rapid-fire requests
       const timer = setTimeout(() => {
-        // Re-check conditions after delay
         if (inView && !loading && params.page === metadata.page) {
           const nextPage = metadata.page + 1;
 
@@ -44,14 +38,13 @@ function AppContent() {
             updateParams({ page: nextPage });
           }
         }
-      }, 500); // 500ms debounce
+      }, 500);
 
       return () => clearTimeout(timer);
     }
   }, [inView, metadata, loading, isInitialLoad, params.page]);
 
-  // Sync the ref if the page changes from outside (reset, filters, etc.)
-  // but ONLY if it's a reset or a major change (page becomes 1)
+  // Sync the ref if the page changes from outside (reset, filters etc),but ONLY if it's a reset or a major change (page becomes 1)
   useEffect(() => {
     if (params.page === 1) {
       requestedPageRef.current = 1;
@@ -69,7 +62,8 @@ function AppContent() {
       search: '',
       type: undefined,
       sort: 'asc',
-      page: 1
+      page: 1,
+      captured: false
     });
   };
 
@@ -88,6 +82,8 @@ function AppContent() {
         onSortChange={(sort) => updateParams({ sort, page: 1 })}
         limit={params.limit}
         onLimitChange={(limit) => updateParams({ limit, page: 1 })}
+        captured={!!params.captured}
+        onCapturedChange={(captured) => updateParams({ captured, page: 1 })}
         onClearAll={handleClearAll}
       />
 
