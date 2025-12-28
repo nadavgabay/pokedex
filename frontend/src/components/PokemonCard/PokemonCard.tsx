@@ -10,59 +10,6 @@ interface PokemonCardProps {
     onClick: () => void;
 }
 
-const normalizePokemonName = (name: string) => {
-    name = name.replace(/%/g, '').replace(/\s*forme$/i, '');
-
-    name = name.replace(/\s*[A-Z][a-z]*\s*[Ss][Ii][Zz][Ee]$/, '');
-
-    name = name.replace(/([a-z])([A-Z])/g, '$1 $2');
-
-    name = name.replace(/([a-zA-Z])(\d)/g, '$1 $2');
-
-    const megaPattern = /^(.+?)\s*Mega\s+\1(\s+(.+))?$/i;
-    const megaMatch = name.match(megaPattern);
-
-    if (megaMatch) {
-        const baseName = megaMatch[1];
-        const suffix = megaMatch[3];
-        name = suffix ? `${baseName}-Mega-${suffix}` : `${baseName}-Mega`;
-    } else {
-        const words = name.split(/\s+/);
-        const seen = new Set<string>();
-        const uniqueWords: string[] = [];
-
-        for (const word of words) {
-            const lower = word.toLowerCase();
-            if (!seen.has(lower) && lower !== '') {
-                seen.add(lower);
-                uniqueWords.push(word);
-            }
-        }
-        name = uniqueWords.join(' ');
-    }
-
-    name = name.toLowerCase().trim();
-
-    const replacements: Record<string, string> = {
-        " ": "-",
-        ".": "",
-        "'": "",
-        "♀": "-f",
-        "♂": "-m",
-        "é": "e",
-        "á": "a",
-        "í": "i",
-        "ó": "o",
-        "ú": "u",
-    }
-
-    for (const [k, v] of Object.entries(replacements)) {
-        name = name.replaceAll(k, v);
-    }
-
-    return name;
-}
-
 const TypeBadge = ({ type }: { type: string }) => {
     if (!type) return null;
     const typeClass = type.toLowerCase();
@@ -78,15 +25,8 @@ export const PokemonCard = memo(({ pokemon, onCapture, onRelease, isUpdating, on
     const [imgSrc, setImgSrc] = useState<string | undefined>(undefined);
 
     const handleImageError = () => {
-        const nameClean = normalizePokemonName(pokemon.name);
-        const artworkUrl = `https://img.pokemondb.net/artwork/large/${nameClean}.jpg`;
-
-        if (imgSrc === artworkUrl || pokemon.imageUrl === artworkUrl) {
-            if (imgSrc !== '/not-found.png') {
-                setImgSrc('/not-found.png');
-            }
-        } else {
-            setImgSrc(artworkUrl);
+        if (imgSrc !== '/not-found.png') {
+            setImgSrc('/not-found.png');
         }
     };
 

@@ -117,50 +117,50 @@ def get_pokemon_by_id(data: List[Dict[str, Any]], pokemon_id: int) -> Optional[D
     return None
 
 def normalize_pokemon_name(name: str) -> str:
-    name = name.replace('%', '')
-    name = re.sub(r'\s*(?:forme|cloak)$', '', name, flags=re.IGNORECASE)
-
-    name = re.sub(r'\s*[A-Z][a-z]*\s*[Ss][Ii][Zz][Ee]$', '', name)
-
-    name = re.sub(r'([a-z])([A-Z])', r'\1 \2', name)
-
-    name = re.sub(r'([a-zA-Z])(\d)', r'\1 \2', name)
-
-    mega_pattern = r'^(.+?)\s*Mega\s+\1(\s+(.+))?$'
-    mega_match = re.match(mega_pattern, name, re.IGNORECASE)
+    # remove % and 'forme' suffixes
+    clean_name = re.sub(r'%|\s*forme$', '', name, flags=re.IGNORECASE)
     
+    # handle "GourgeistSmall Size" -> "Gourgeist"
+    # word characters (the name)
+    # followed by Small/Average/Large/Super
+    # followed by " Size"
+    # and keeps only the first part.
+    clean_name = re.sub(r'([a-zA-Z]+)(?:Small|Average|Large|Super|Pumpkaboo) Size$', r'\1', clean_name, flags=re.IGNORECASE)
+
+    # handle Mega Evolutions (e.g. "Venusaur Mega Venusaur" -> "Venusaur-Mega")
+    mega_match = re.match(r'^(.+?)\s*Mega\s+\1(\s+(.+))?$', clean_name, re.IGNORECASE)
     if mega_match:
         base_name = mega_match.group(1)
         suffix = mega_match.group(3)
-        name = f"{base_name}-Mega-{suffix}" if suffix else f"{base_name}-Mega"
-    else:
-        words = name.split()
-        seen = set()
-        unique_words = []
-        for word in words:
-            lower = word.lower()
-            if lower not in seen:
-                seen.add(lower)
-                unique_words.append(word)
-        name = " ".join(unique_words)
+        clean_name = f"{base_name} Mega {suffix}" if suffix else f"{base_name} Mega"
+
+    # handle CamelCase and LetterDigit boundaries (insert spaces)
+    clean_name = re.sub(r'([a-z])([A-Z])', r'\1 \2', clean_name)
+    clean_name = re.sub(r'([a-zA-Z])(\d)', r'\1 \2', clean_name)
+
+    # deduplicate words and normalize to lowercase slug
+    words = re.split(r'[\s-]+', clean_name)
+    unique_words = []
+    seen = set()
+    for w in words:
+        w_lower = w.lower()
+        if w_lower and w_lower not in seen:
+            seen.add(w_lower)
+            unique_words.append(w_lower)
     
-    name = name.lower().strip()
-    
+    clean_name = '-'.join(unique_words)
+
+    # Final character replacements for URL safety
     replacements = {
-        " ": "-",
-        ".": "",
-        "'": "",
-        "'": "",
-        "♀": "-f",
-        "♂": "-m",
-        "é": "e",
-        "á": "a",
-        "í": "i",
-        "ó": "o",
-        "ú": "u",
+        '.': '', "'": '', '"': '',
+        '♀': '-f', '♂': '-m',
+        'é': 'e', 'á': 'a', 'í': 'i', 'ó': 'o', 'ú': 'u'
     }
-
+    
     for k, v in replacements.items():
-        name = name.replace(k, v)
+        clean_name = clean_name.replace(k, v)
+        
+    # Collapse multiple hyphens and trim
+    clean_name = re.sub(r'-+', '-', clean_name).strip('-')
 
-    return name
+    return clean_name
