@@ -8,6 +8,8 @@ import { usePokemon } from './hooks/usePokemon';
 import { useUrlParams } from './hooks/useUrlParams';
 import { getTypes } from './services/api';
 import styles from './App.module.css';
+import Butterfly from './components/Butterfly/Butterfly';
+
 
 function AppContent() {
   const { params, updateParams } = useUrlParams();
@@ -69,6 +71,7 @@ function AppContent() {
 
   return (
     <div className={styles.appContainer}>
+      <Butterfly />
 
       <Header capturedCount={metadata?.capturedCount || 0} />
 
